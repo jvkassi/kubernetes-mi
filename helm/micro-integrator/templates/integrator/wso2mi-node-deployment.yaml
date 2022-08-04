@@ -14,7 +14,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "micro-integrator.fullname" . }}
+  name: {{ include "micro-integrator.fullname" . }}-mi
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "micro-integrator.labels" . | indent 4 }}
@@ -27,12 +27,14 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      deployment: {{ template "micro-integrator.fullname" . }}
+      deployment: {{ include "micro-integrator.fullname" . }}
       app: {{ .Release.Name }}
   template:
     metadata:
+      annotations:
+        checksum.am.conf: {{ include (print $.Template.BasePath "/integrator/wso2mi-conf.yaml") . | sha256sum }}
       labels:
-        deployment: {{ template "micro-integrator.fullname" . }}
+        deployment: {{ include "micro-integrator.fullname" . }}
         app: {{ .Release.Name }}
     spec:
       containers:
@@ -84,6 +86,11 @@ spec:
               value: {{ $val | quote }}
           {{- end }}
           {{- end }}
+          volumeMounts:
+            - name: wso2mi-conf
+              mountPath: /home/wso2carbon/wso2-config-volume/conf
+            - name: wso2mi-carbonapps
+              mountPath: /home/wso2carbon/wso2mi-4.1.0/repository/deployment/server/carbonapps
       {{- if .Values.wso2.deployment.mi.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.wso2.deployment.mi.imagePullSecrets }}
@@ -91,3 +98,10 @@ spec:
       imagePullSecrets:
         - name: wso2micro-integrator-deployment-creds
       {{ end }}
+      volumes: 
+        - name: wso2mi-conf
+          configMap:
+            name: {{ include "micro-integrator.fullname" . }}-conf
+        - name: wso2mi-carbonapps
+          persistentVolumeClaim:
+            claimName: {{ include "micro-integrator.fullname" . }}-mi-carbonapps

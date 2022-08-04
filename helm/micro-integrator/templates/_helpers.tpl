@@ -72,3 +72,4 @@ image: {{ $dockerRegistry }}/{{ $imageName }}{{- if not (eq $imageTag "") }}:{{ 
 {{- end -}}
 {{- end -}}
 {{- end -}}
+

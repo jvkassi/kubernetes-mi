@@ -1,0 +1,82 @@
+# Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "micro-integrator.fullname" . }}-mi-dashboard
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "micro-integrator.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.wso2.deployment.dashboard.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.wso2.deployment.dashboard.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.wso2.deployment.dashboard.strategy.rollingUpdate.maxUnavailable }}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      deployment: {{ include "micro-integrator.fullname" . }}-mi-dashboard
+      app: {{ .Release.Name }}-mi-dashboard
+  template:
+    metadata:
+      annotations:
+        checksum.am.conf: {{ include (print $.Template.BasePath "/dashboard/wso2mi-dashboard-conf.yaml") . | sha256sum }}
+      labels:
+        deployment: {{ include "micro-integrator.fullname" . }}-mi-dashboard
+        app: {{ .Release.Name }}-mi-dashboard
+    spec:
+      containers:
+        - name: wso2micro-integrator-dashboard
+{{- include "image" (dict "Values" .Values "deployment" .Values.wso2.deployment.dashboard) | indent 10 }}
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - nc -z localhost 9743
+            initialDelaySeconds: {{ .Values.wso2.deployment.dashboard.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.wso2.deployment.dashboard.livenessProbe.periodSeconds }}
+          resources:
+            requests:
+              memory: {{ .Values.wso2.deployment.dashboard.resources.requests.memory }}
+              cpu: {{ .Values.wso2.deployment.dashboard.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.wso2.deployment.dashboard.resources.limits.memory }}
+              cpu: {{ .Values.wso2.deployment.dashboard.resources.limits.cpu }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9743
+              protocol: TCP
+          {{- if .Values.wso2.deployment.dashboard.envs }}
+          env:
+            {{- range $key, $val := .Values.wso2.deployment.dashboard.envs }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+          {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: wso2mi-dashboard-conf
+              mountPath: /home/wso2carbon/wso2-config-volume/conf
+      {{- if .Values.wso2.deployment.dashboard.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.wso2.deployment.dashboard.imagePullSecrets }}
+      {{- else if and (not (eq .Values.wso2.subscription.username "")) (not (eq .Values.wso2.subscription.password "")) }}
+      imagePullSecrets:
+        - name: wso2micro-integrator-deployment-creds
+      {{ end }}
+      volumes: 
+        - name: wso2mi-dashboard-conf
+          configMap:
+            name: {{ include "micro-integrator.fullname" . }}-mi-dashboard-conf
