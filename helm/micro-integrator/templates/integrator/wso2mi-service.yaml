@@ -38,7 +38,7 @@ spec:
     - port: 9164
       targetPort: 9164
       protocol: TCP
-      name: management
+      name: https-management
     {{- if .Values.wso2.deployment.mi.synapseTest.enabled }}
     - port: 9008
       targetPort: 9008
