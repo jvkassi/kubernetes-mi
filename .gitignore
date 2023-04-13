@@ -17,6 +17,7 @@
 *.ear
 *.zip
 *.tar.gz
+*.tgz
 *.rar
 
 # IntelliJ IDEA Project Files

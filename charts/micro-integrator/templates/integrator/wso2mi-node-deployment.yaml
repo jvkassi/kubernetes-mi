@@ -90,7 +90,7 @@ spec:
             - name: wso2mi-conf
               mountPath: /home/wso2carbon/wso2-config-volume/conf
             - name: wso2mi-carbonapps
-              mountPath: /home/wso2carbon/wso2mi-4.1.0/repository/deployment/server/carbonapps
+              mountPath: /home/wso2carbon/wso2mi-4.2.0/repository/deployment/server/carbonapps
       {{- if .Values.wso2.deployment.mi.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.wso2.deployment.mi.imagePullSecrets }}
