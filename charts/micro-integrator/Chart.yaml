@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-apiVersion: v1
+apiVersion: v2
 appVersion: "4.1.0"
 description: A Helm chart for WSO2 Micro-Integrator
 name: micro-integrator
-version: 4.1.0-2
+version: 4.1.0-3
+type: application
 icon: https://wso2.cachefly.net/wso2/sites/all/images/wso2logo.svg
