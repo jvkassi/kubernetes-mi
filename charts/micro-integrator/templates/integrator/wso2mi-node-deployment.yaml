@@ -14,7 +14,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "micro-integrator.fullname" . }}-mi
+  name: {{ include "micro-integrator.fullname" . }}-mi-integrator
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "micro-integrator.labels" . | indent 4 }}
