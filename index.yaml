@@ -3,6 +3,17 @@ entries:
   micro-integrator:
   - apiVersion: v2
     appVersion: 4.1.0
+    created: "2023-04-13T12:14:48.348149287Z"
+    description: A Helm chart for WSO2 Micro-Integrator
+    digest: cc1f462b10be339984341786c9052111f9059f76cdd9652c1c993cc55d3efaf1
+    icon: https://wso2.cachefly.net/wso2/sites/all/images/wso2logo.svg
+    name: micro-integrator
+    type: application
+    urls:
+    - https://github.com/jvkassi/kubernetes-mi/releases/download/micro-integrator-4.1.0-5/micro-integrator-4.1.0-5.tgz
+    version: 4.1.0-5
+  - apiVersion: v2
+    appVersion: 4.1.0
     created: "2023-04-13T11:38:54.546730469Z"
     description: A Helm chart for WSO2 Micro-Integrator
     digest: a5bdc7a9f9ae2ba86c932ab53d0cdb40ce93cf01445667d8269be5c4a9571514
@@ -23,4 +34,4 @@ entries:
     urls:
     - https://github.com/jvkassi/kubernetes-mi/releases/download/micro-integrator-4.1.0-3/micro-integrator-4.1.0-3.tgz
     version: 4.1.0-3
-generated: "2023-04-13T11:38:54.54674247Z"
+generated: "2023-04-13T12:14:48.348162287Z"
