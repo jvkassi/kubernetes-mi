@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - helm
+      - gh-pages
 
 jobs:
   release:
