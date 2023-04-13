@@ -140,3 +140,11 @@ wso2:
         kubernetes.io/ingress.class: "traefik"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
+    dashboard:
+      # Hostname for the Micro Integrator management endpoint.
+      hostname: "dashboard.mi.dev.technocify.fr"
+      # Annotations for the Micro Integrator management Ingress.
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
